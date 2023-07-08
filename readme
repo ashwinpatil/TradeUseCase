@@ -1,0 +1,24 @@
+ 
+   
+   1)TradeStore.java
+   
+   This is the main class which  will take request to add/validate trade .
+   This class will cover 2 Validations -
+     a)Store should not allow the trade which has less maturity date then today date.
+     b)During transmission if the lower version is being received by the store it will reject the trade and throw an exception 
+     If the version is same it will override the existing record.
+   
+   I have Kept it simple Java class which will receive Trade add it in the ConcurrrentSkipListMap() which is thread-safe and 
+   synchronized considering we will get Concurrent request. 
+  
+   This could be a Service based on requirement to Validate the Trade by fetching the trades from any RDBMS or Mongodb ..
+   This Service can either be  a REST API Or can listen to  a topic on Kafka or be a Listener over MQ 
+   
+   2) TradeExpiryUpdateService.java
+  
+	   This is a Service class where i have used  Timer object to schedule tasks.
+	   The task is scheduled to run every 5 minutes by calling timer.schedule(task, 0, 300000) to update the expiry flag of trade.
+	 
+   3)	 Trade.java
+         The Trade class represents a trade with the specified attributes: tradeId, version, counterPartyId, bookId, 
+         maturityDate, createdDate, and expired flag.
